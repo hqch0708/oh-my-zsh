@@ -61,11 +61,11 @@ main() {
       exit 1
     fi
   fi
-  env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+  
+  env git clone --depth=1 https://github.com/hqch0708/oh-my-zsh.git $ZSH || {
     printf "Error: git clone of oh-my-zsh repo failed\n"
     exit 1
   }
-
 
   printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
@@ -93,6 +93,17 @@ main() {
       printf "${BLUE}Please manually change your default shell to zsh!${NORMAL}\n"
     fi
   fi
+
+  #add plugins
+  env git clone --depth=1 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting $ZSH || {
+    printf "Error: git clone of zsh-syntax-highlighting repo failed\n"
+    exit 1
+  }
+
+  env git clone --depth=1 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions $ZSH || {
+    printf "Error: git clone of zsh-autosuggestions repo failed\n"
+    exit 1
+  }
 
   printf "${GREEN}"
   echo '         __                                     __   '
