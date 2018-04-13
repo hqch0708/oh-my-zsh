@@ -95,12 +95,12 @@ main() {
   fi
 
   #add plugins
-  env git clone --depth=1 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting $ZSH || {
+  env git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/custom/plugins/zsh-syntax-highlighting || {
     printf "Error: git clone of zsh-syntax-highlighting repo failed\n"
     exit 1
   }
 
-  env git clone --depth=1 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions $ZSH || {
+  env git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $ZSH/custom/plugins/zsh-autosuggestions || {
     printf "Error: git clone of zsh-autosuggestions repo failed\n"
     exit 1
   }
