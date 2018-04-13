@@ -37,3 +37,9 @@ then
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
 fi
+
+cd "$ZSH/custom/plugins/zsh-syntax-highlighting"
+git pull --rebase --stat origin master
+
+cd "$ZSH/custom/plugins/zsh-autosuggestions"
+git pull --rebase --stat origin master
