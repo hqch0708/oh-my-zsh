@@ -2,7 +2,7 @@
   <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
 </p>
 
-Oh My Zsh is an open source, community-driven framework for managing your [zsh](http://www.zsh.org/) configuration.
+Oh My Zsh is an open source, community-driven framework for managing your [zsh](https://www.zsh.org/) configuration.
 
 Sounds boring. Let's try again.
 
@@ -12,7 +12,7 @@ Once installed, your terminal shell will become the talk of the town _or your mo
 
 Finally, you'll begin to get the sort of attention that you have always felt you deserved. ...or maybe you'll use the time that you're saving to start flossing more often. 😬
 
-To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
+To learn more, visit [ohmyz.sh](https://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
 
 ## Getting Started
 
@@ -209,7 +209,7 @@ If you want to uninstall `oh-my-zsh`, just run `uninstall_oh_my_zsh` from the co
 
 ## Contributing
 
-I'm far from being a [Zsh](http://www.zsh.org/) expert and suspect there are many ways to improve – if you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
+I'm far from being a [Zsh](https://www.zsh.org/) expert and suspect there are many ways to improve – if you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
 We also need people to test out pull-requests. So take a look through [the open issues](https://github.com/robbyrussell/oh-my-zsh/issues) and help where you can.
 
@@ -232,7 +232,7 @@ We're on the social media.
 
 ## Merchandise
 
-We have [stickers](https://shop.planetargon.com/products/ohmyzsh-stickers-set-of-3-stickers) and [shirts](http://shop.planetargon.com/products/ohmyzsh-t-shirts) for you to show off your love of Oh My Zsh. Again, this will help you become the talk of the town!
+We have [stickers](https://shop.planetargon.com/products/ohmyzsh-stickers-set-of-3-stickers) and [shirts](https://shop.planetargon.com/products/ohmyzsh-t-shirts) for you to show off your love of Oh My Zsh. Again, this will help you become the talk of the town!
 
 ## License
 
