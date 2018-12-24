@@ -32,7 +32,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 #### via curl
 
 ```shell
-sh -c "$(curl -fsSL http://106.14.203.210/download/zsh/install.sh)"
+sh -c "$(curl -fsSL https://www.superyy.cn/download/zsh/install.sh)"
 ```
 
 ## Using Oh My Zsh
