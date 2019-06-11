@@ -32,7 +32,6 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 #### via curl
 
 ```shell
-<<<<<<< HEAD
 sh -c "$(curl -fsSL https://www.superyy.cn/download/zsh/install.sh)"
 ```
 
