@@ -122,4 +122,4 @@ main() {
   env zsh -l
 }
 
-main
+main "$@"
