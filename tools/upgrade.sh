@@ -43,3 +43,6 @@ git pull --rebase --stat origin master
 
 cd "$ZSH/custom/plugins/zsh-autosuggestions"
 git pull --rebase --stat origin master
+
+cd "$ZSH/custom/themes/powerlevel9k"
+git pull --rebase --stat origin master
