@@ -103,6 +103,12 @@ main() {
     exit 1
   }
 
+  env git clone https://github.com/bhilburn/powerlevel9k.git $ZSH/custom/themes/powerlevel9ks || {
+    printf "Error: git clone of powerlevel9k repo failed\n"
+    exit 1
+  }
+
+
   printf "${GREEN}"
   echo '         __                                     __   '
   echo '  ____  / /_     ____ ___  __  __   ____  _____/ /_  '
