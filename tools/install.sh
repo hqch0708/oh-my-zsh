@@ -95,6 +95,23 @@ setup_ohmyzsh() {
 		exit 1
 	}
 
+	#add plugins
+  	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/custom/plugins/zsh-syntax-highlighting || {
+    		error "git clone of zsh-syntax-highlighting repo failed"
+    		exit 1
+  	}
+
+  	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $ZSH/custom/plugins/zsh-autosuggestions || {
+    		error "git clone of zsh-autosuggestions repo failed"
+    		exit 1
+  	}
+
+  	git clone https://github.com/bhilburn/powerlevel9k.git $ZSH/custom/themes/powerlevel9ks || {
+    		error "git clone of powerlevel9k repo failed"
+    		exit 1
+  	}
+
+	
 	echo
 }
 
