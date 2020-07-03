@@ -52,8 +52,7 @@ PROMPT="
 %{$fg[green]%}$(box_name) \
 %{$fg[white]%}in \
 %{$terminfo[bold]$fg[yellow]%}[${current_dir}]%{$reset_color%} \
-${hg_info} \
-${git_info} \
+${hg_info}${git_info} \
 ${git_last_commit}
 %{$fg[red]%}%* \
 %{$terminfo[bold]$fg[white]%}› %{$reset_color%}"
