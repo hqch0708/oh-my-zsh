@@ -121,10 +121,10 @@ setup_ohmyzsh() {
 		exit 1
   	}
 
-  	git clone https://github.com/bhilburn/powerlevel9k.git $ZSH/custom/themes/powerlevel9ks || {
-		error "git clone of powerlevel9k repo failed"
-		exit 1
-  	}
+  	# git clone https://github.com/bhilburn/powerlevel9k.git $ZSH/custom/themes/powerlevel9ks || {
+	# 	error "git clone of powerlevel9k repo failed"
+	# 	exit 1
+  	# }
 	echo
 }
 
