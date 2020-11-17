@@ -37,6 +37,9 @@
 #
 set -e
 
+# Track if $ZSH was provided
+custom_zsh=${ZSH:+yes}
+
 # Default settings
 ZSH=${ZSH:-~/.oh-my-zsh}
 REPO=${REPO:-ohmyzsh/ohmyzsh}
@@ -53,12 +56,16 @@ command_exists() {
 	command -v "$@" >/dev/null 2>&1
 }
 
-error() {
+fmt_error() {
 	echo ${RED}"Error: $@"${RESET} >&2
 }
 
-underline() {
+fmt_underline() {
 	echo "$(printf '\033[4m')$@$(printf '\033[24m')"
+}
+
+fmt_code() {
+  echo "\`$(printf '\033[38;5;247m')$@${RESET}\`"
 }
 
 setup_color() {
@@ -91,13 +98,13 @@ setup_ohmyzsh() {
 	echo "${BLUE}Cloning Oh My Zsh...${RESET}"
 
 	command_exists git || {
-		error "git is not installed"
+    fmt_error "git is not installed"
 		exit 1
 	}
 
 	if [ "$OSTYPE" = cygwin ] && git --version | grep -q msysgit; then
-		error "Windows/MSYS Git is not supported on Cygwin"
-		error "Make sure the Cygwin git package is installed and is first on the \$PATH"
+    fmt_error "Windows/MSYS Git is not supported on Cygwin"
+    fmt_error "Make sure the Cygwin git package is installed and is first on the \$PATH"
 		exit 1
 	fi
 
@@ -106,25 +113,10 @@ setup_ohmyzsh() {
 		-c fetch.fsck.zeroPaddedFilemode=ignore \
 		-c receive.fsck.zeroPaddedFilemode=ignore \
 		--depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
-		error "git clone of oh-my-zsh repo failed"
+    fmt_error "git clone of oh-my-zsh repo failed"
 		exit 1
 	}
 
-	#add plugins
-  	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/custom/plugins/zsh-syntax-highlighting || {
-		error "git clone of zsh-syntax-highlighting repo failed"
-		exit 1
-  	}
-
-  	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $ZSH/custom/plugins/zsh-autosuggestions || {
-		error "git clone of zsh-autosuggestions repo failed"
-		exit 1
-  	}
-
-  	# git clone https://github.com/bhilburn/powerlevel9k.git $ZSH/custom/themes/powerlevel9ks || {
-	# 	error "git clone of powerlevel9k repo failed"
-	# 	exit 1
-  	# }
 	echo
 }
 
@@ -145,8 +137,8 @@ setup_zshrc() {
 		if [ -e "$OLD_ZSHRC" ]; then
 			OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
 			if [ -e "$OLD_OLD_ZSHRC" ]; then
-				error "$OLD_OLD_ZSHRC exists. Can't back up ${OLD_ZSHRC}"
-				error "re-run the installer again in a couple of seconds"
+        fmt_error "$OLD_OLD_ZSHRC exists. Can't back up ${OLD_ZSHRC}"
+        fmt_error "re-run the installer again in a couple of seconds"
 				exit 1
 			fi
 			mv "$OLD_ZSHRC" "${OLD_OLD_ZSHRC}"
@@ -175,16 +167,16 @@ setup_shell() {
 	fi
 
 	# If this user's login shell is already "zsh", do not attempt to switch.
-	if [ "$(basename "$SHELL")" = "zsh" ]; then
+  if [ "$(basename -- "$SHELL")" = "zsh" ]; then
 		return
 	fi
 
 	# If this platform doesn't provide a "chsh" command, bail out.
 	if ! command_exists chsh; then
-		cat <<-EOF
-			I can't change your shell automatically because this system does not have chsh.
-			${BLUE}Please manually change your default shell to zsh${RESET}
-		EOF
+    cat <<EOF
+I can't change your shell automatically because this system does not have chsh.
+${BLUE}Please manually change your default shell to zsh${RESET}
+EOF
 		return
 	fi
 
@@ -212,7 +204,7 @@ setup_shell() {
 		elif [ -f /usr/share/defaults/etc/shells ]; then # Solus OS
 			shells_file=/usr/share/defaults/etc/shells
 		else
-			error "could not find /etc/shells file. Change your default shell manually."
+      fmt_error "could not find /etc/shells file. Change your default shell manually."
 			return
 		fi
 
@@ -221,8 +213,8 @@ setup_shell() {
 		# 2. If that fails, get a zsh path from the shells file, then check it actually exists
 		if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
 			if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
-				error "no zsh binary found or not present in '$shells_file'"
-				error "change your default shell manually."
+        fmt_error "no zsh binary found or not present in '$shells_file'"
+        fmt_error "change your default shell manually."
 				return
 			fi
 		fi
@@ -237,7 +229,7 @@ setup_shell() {
 
 	# Actually change the default shell to zsh
 	if ! chsh -s "$zsh"; then
-		error "chsh command unsuccessful. Change your default shell manually."
+    fmt_error "chsh command unsuccessful. Change your default shell manually."
 	else
 		export SHELL="$zsh"
 		echo "${GREEN}Shell successfully changed to '$zsh'.${RESET}"
@@ -247,7 +239,7 @@ setup_shell() {
 }
 
 main() {
-	# Run as unattended if stdin is closed
+  # Run as unattended if stdin is not a tty
 	if [ ! -t 0 ]; then
 		RUNZSH=no
 		CHSH=no
@@ -271,10 +263,24 @@ main() {
 	fi
 
 	if [ -d "$ZSH" ]; then
-		cat <<-EOF
-			${YELLOW}You already have Oh My Zsh installed.${RESET}
-			You'll need to remove '$ZSH' if you want to reinstall.
-		EOF
+    echo "${YELLOW}The \$ZSH folder already exists ($ZSH).${RESET}"
+    if [ "$custom_zsh" = yes ]; then
+      cat <<EOF
+
+You ran the installer with the \$ZSH setting or the \$ZSH variable is
+exported. You have 3 options:
+
+1. Unset the ZSH variable when calling the installer:
+   $(fmt_code "ZSH= sh install.sh")
+2. Install Oh My Zsh to a directory that doesn't exist yet:
+   $(fmt_code "ZSH=path/to/new/ohmyzsh/folder sh install.sh")
+3. (Caution) If the folder doesn't contain important information,
+   you can just remove it with $(fmt_code "rm -r $ZSH")
+
+EOF
+    else
+      echo "You'll need to remove it if you want to reinstall."
+    fi
 		exit 1
 	fi
 
@@ -283,24 +289,24 @@ main() {
 	setup_shell
 
 	printf "$GREEN"
-	cat <<-'EOF'
+  cat <<'EOF'
 		         __                                     __
 		  ____  / /_     ____ ___  __  __   ____  _____/ /_
 		 / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
-		/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
-		\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
+/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
+\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
 		                        /____/                       ....is now installed!
 
 
-	EOF
-	cat <<-EOF
-		Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
+EOF
+  cat <<EOF
+Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
 
-		• Follow us on Twitter: $(underline https://twitter.com/ohmyzsh)
-		• Join our Discord server: $(underline https://discord.gg/ohmyzsh)
-		• Get stickers, shirts, coffee mugs and other swag: $(underline https://shop.planetargon.com/collections/oh-my-zsh)
+• Follow us on Twitter: $(fmt_underline https://twitter.com/ohmyzsh)
+• Join our Discord server: $(fmt_underline https://discord.gg/ohmyzsh)
+• Get stickers, shirts, coffee mugs and other swag: $(fmt_underline https://shop.planetargon.com/collections/oh-my-zsh)
 
-	EOF
+EOF
 	printf "$RESET"
 
 	if [ $RUNZSH = no ]; then
